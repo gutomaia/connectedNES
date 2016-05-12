@@ -44,14 +44,14 @@ void LatchNES() {
 
 void OnData(String event, String data) {
     Serial.println(data);
-    char inputStr[193];
-    data.toCharArray(inputStr, 193);
+    static int length = (data.length() > 192)?192:data.length();
+    char inputStr[length];
+    data.toCharArray(inputStr, length);
     tweetData[0] = 0xE8;
     static int i=1;
-    for(i=1; i<192; i++) { tweetData[i] = inputStr[i]; }
-
+    for(i=1; i<length; i++) { tweetData[i] = inputStr[i]; }
     memset(&inputStr[0], 0, sizeof(inputStr));
-    bytesToTransfer = 192;
+    bytesToTransfer = length;
     byteCount = 0;
 }
 
