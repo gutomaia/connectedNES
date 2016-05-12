@@ -2,9 +2,17 @@
 
 // Remember that Ethernet Shield uses pins 10, 11, 12 and 13
 
-#define NES_CLOCK 8                                 // Red wire
-#define NES_LATCH 7                                 // Orange wire
-#define NES_DATA  5                                 // Yellow wire
+#define NES_CLOCK 2                                 // Red wire
+#define NES_LATCH 3                                 // Orange wire
+#define NES_DATA  4                                 // Yellow wire
+
+// Also that not all pins are available for attach interrupt
+// You will need interrupt events on CLOCK and LATCH
+// https://www.arduino.cc/en/Reference/AttachInterrupt
+
+#define NES_CLOCK_INT 0                        // Red wire
+#define NES_LATCH_INT 1                        // Orange wire
+
 
 volatile unsigned char latchedByte;                 // Controller press byte value = one letter in tweet
 volatile unsigned char bitCount;                    // A single LDA $4017 (get one bit from "controller press")
@@ -55,8 +63,8 @@ void setup() {
     pinMode(NES_LATCH, INPUT);                      // Set NES controller orange wire (latch) as an input
     pinMode(NES_DATA, OUTPUT);                      // Set NES controller yellow wire (data) as an output
 
-    attachInterrupt(NES_CLOCK, ClockNES, FALLING);  // When NES clock ends, execute ClockNES
-    attachInterrupt(NES_LATCH, LatchNES, RISING);   // When NES latch fires, execure LatchNES
+    attachInterrupt(NES_CLOCK_INT, ClockNES, FALLING);  // When NES clock ends, execute ClockNES
+    attachInterrupt(NES_LATCH_INT, LatchNES, RISING);   // When NES latch fires, execure LatchNES
 
     byteCount = 0;                                  // Initialize byteCount at zero, no letters printed to screen
     bytesToTransfer = 0;                            // Initialize bytesToTransfer at zero, no letters waiting to print to screen
